@@ -19,18 +19,20 @@
                 </tr>
               </thead>
               <tbody>
+                <?php foreach($data as $item): ?>
                 <tr>
-                  <td>1</td>
-                  <td>Test</td>
-                  <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae obcaecati quisquam unde doloremque repellendus voluptates quo minima amet magnam, quasi minus vel mollitia, provident modi sapiente pariatur? Dolorum, sequi quibusdam.</td>
-                  <td>Img</td>
+                  <td><?php echo $item->id ?></td>
+                  <td><?php echo $item->title ?></td>
+                  <td><?php echo $item->content ?></td>
+                  <td><?php echo $item->image ?></td>
                   <td>
                     <div class="d-flex justify-content-between">
-                      <a href="http://" class="btn btn-secondary">Edit</a>
-                      <a href="http://" class="btn btn-danger">Delete</a>
+                      <a href="<?php echo base_url('article/edit/'.$item->id)?>" class="btn btn-success">Edit</a>
+                      <a href="<?php echo base_url('article/delete/'.$item->id)?>" class="btn btn-danger">Delete</a>
                     </div>
                   </td>
                 </tr>
+                <?php endforeach; ?>
               </tbody>
             </table>
           </div>
