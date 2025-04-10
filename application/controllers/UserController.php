@@ -27,15 +27,29 @@
       $this->form_validation->set_rules('title','Titre','trim|required');
       $this->form_validation->set_rules('content','Contenue','trim|required');
       if($this->form_validation->run()){
-        $data = [
-          'title'=>$this->input->post('title'),
-          'content'=>$this->input->post('content'),
-          'image'=>$this->input->post('image'),
-          'created_at' => date('Y-m-d H:i:s')
-        ];
-        $this->load->model('UserModel','user');
-        $this->user->insertUser($data);
-        redirect(base_url('user'));
+        $file_name = str_replace(' ','-',$_FILES['image']['name']);
+        $config['upload_path']          = './uploads/';
+        $config['allowed_types']        = 'jpg|png';
+        $config['file_name']        = $file_name;
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('image'))
+        {
+          $imageerror = array('error' => $this->upload->display_errors());
+          $this->load->view('template/header');
+          $this->load->view('create_user',$imageerror);
+          $this->load->view('template/header');
+        }else {
+          $data = [
+            'title'=>$this->input->post('title'),
+            'content'=>$this->input->post('content'),
+            'image'=>$this->upload->data('file_name'),
+            'created_at' => date('Y-m-d H:i:s')
+          ];
+          $this->load->model('UserModel','user');
+          $this->user->insertUser($data);
+          redirect(base_url('user'));
+        }
       }else{
         $this->addUser();
         // redirect(base_url('user/add'));
