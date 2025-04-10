@@ -8,7 +8,7 @@
             <a href="<?php echo base_url('user')?>" class="btn btn-primary">List user</a>
           </div>
           <div class="card-body">
-          <form action="<?php echo base_url('user/store')?>" method="post">
+          <form action="<?php echo base_url('user/store')?>" method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="title">Titre</label>
               <input type="text" class="form-control" name="title" id="title">
@@ -22,6 +22,7 @@
             <div class="form-group">
               <label for="image">Image</label>
               <input type="file" class="form-control" name="image" id="image">
+              <small class="text-danger"><?php if(isset($error)){echo $error;} ?></small>
             </div>
             <div class="form-group">
               <input type="submit" class="btn btn-success" value="Valider">

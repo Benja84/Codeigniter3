@@ -33,8 +33,20 @@
           'allowed_type' => 'jpg|png',
           'max_size' => 1000,
           'file_name' => $file_name
-
         ];
+        $this->load->library('upload',$config);
+        if ( ! $this->upload->do_upload('userfile'))
+        {
+          $error = array('error' => $this->upload->display_errors());
+
+          $this->load->view('upload_form', $error);
+        }
+        else
+        {
+          $data = array('upload_data' => $this->upload->data());
+
+          $this->load->view('upload_success', $data);
+        }
         $data = [
           'title'=>$this->input->post('title'),
           'content'=>$this->input->post('content'),
