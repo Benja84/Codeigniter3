@@ -7,7 +7,7 @@
       parent::__construct();
       
       $this->load->model('UserModel','user');
-      $this->load->library('form_validation'); // Load the library
+      $this->load->library('form_validation','url'); // Load the library
     }
     public function index(){
       $data['data'] = $this->user->getAll();
@@ -27,36 +27,36 @@
       $this->form_validation->set_rules('title','Titre','trim|required');
       $this->form_validation->set_rules('content','Contenue','trim|required');
       if($this->form_validation->run()){
-        $file_name = str_replace(' ','-',$this->input->post('image'));
+        $file_name = str_replace(' ','-',$_FILES['image']['name']);
         $config = [
-          'upload_path' => './images/',
-          'allowed_type' => 'jpg|png',
-          'max_size' => 1000,
+          'upload_path' => './uploads/',
+          'allowed_types' => 'jpg|png',
+          'max_size' => 510000,
           'file_name' => $file_name
         ];
         $this->load->library('upload',$config);
-        if ( ! $this->upload->do_upload('userfile'))
+print_r($file_name);
+        if (!$this->upload->do_upload('image'))
         {
           $error = array('error' => $this->upload->display_errors());
 
-          $this->load->view('upload_form', $error);
+          $this->load->view('template/header');
+          $this->load->view('create_user',$error);
+          $this->load->view('template/header');
+        }else{
+          print_r($this->upload->data());
+          $data = [
+            'title'=>$this->input->post('title'),
+            'content'=>$this->input->post('content'),
+            'image'=>$this->upload->data('file_name'),
+            'created_at' => date('Y-m-d H:i:s')
+          ];
+          $this->load->model('UserModel','user');
+          $this->user->insertUser($data);
+          $this->session->set_flashdata('success',"Article créé avec succé");
+          redirect(base_url('user'));
         }
-        else
-        {
-          $data = array('upload_data' => $this->upload->data());
-
-          $this->load->view('upload_success', $data);
-        }
-        $data = [
-          'title'=>$this->input->post('title'),
-          'content'=>$this->input->post('content'),
-          'image'=>$this->input->post('image'),
-          'created_at' => date('Y-m-d H:i:s')
-        ];
-        $this->load->model('UserModel','user');
-        $this->user->insertUser($data);
-        $this->session->set_flashdata('success',"Article créé avec succé");
-        redirect(base_url('user'));
+        
       }else{
         $this->addUser();
         // redirect(base_url('user/add'));

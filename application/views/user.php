@@ -9,7 +9,7 @@
               <?php echo $this->session->flashData('success');?>
             </div>
             <?php endif;?>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-around">
               <h5>Articles</h5>
               <a href="<?php echo base_url('user/add')?>" class="btn btn-primary">Add new user</a>
             </div>
@@ -31,9 +31,9 @@
                   <td><?php echo $item->id ?></td>
                   <td><?php echo $item->title ?></td>
                   <td><?php echo $item->content ?></td>
-                  <td><?php echo $item->image ?></td>
+                  <td class="d-flex justify-content-center"><img src="<?php echo base_url('/uploads/'.$item->image)  ?>" alt="" height="70px"></td>
                   <td>
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-around">
                       <a href="<?php echo base_url('article/edit/'.$item->id)?>" class="btn btn-success">Edit</a>
                       <a href="<?php echo base_url('article/delete/'.$item->id)?>" class="btn btn-danger">Delete</a>
                     </div>
@@ -47,3 +47,4 @@
       </div>
     </div>
   </div>
+  
