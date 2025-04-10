@@ -27,6 +27,14 @@
       $this->form_validation->set_rules('title','Titre','trim|required');
       $this->form_validation->set_rules('content','Contenue','trim|required');
       if($this->form_validation->run()){
+        $file_name = str_replace(' ','-',$this->input->post('image'));
+        $config = [
+          'upload_path' => './images/',
+          'allowed_type' => 'jpg|png',
+          'max_size' => 1000,
+          'file_name' => $file_name
+
+        ];
         $data = [
           'title'=>$this->input->post('title'),
           'content'=>$this->input->post('content'),
@@ -35,6 +43,7 @@
         ];
         $this->load->model('UserModel','user');
         $this->user->insertUser($data);
+        $this->session->set_flashdata('success',"Article créé avec succé");
         redirect(base_url('user'));
       }else{
         $this->addUser();
@@ -59,6 +68,7 @@
           'image'=>$this->input->post('image'),
         ];
         $this->user->updateData($id,$data);
+        $this->session->set_flashdata('success',"Mise à jour avec succé");
         redirect(base_url('user'));
       }else{
         $this->editArticle($id);
@@ -68,6 +78,7 @@
 
     public function delete($id){
       $this->user->deleteArticle($id);
+      $this->session->set_flashdata('success',"Suppression d'article avec succé");
       redirect(base_url('user'));
     }
 
